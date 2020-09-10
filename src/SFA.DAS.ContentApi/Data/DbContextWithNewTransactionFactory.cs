@@ -1,4 +1,6 @@
 using System.Data.Common;
+using System.Data.SqlClient;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -8,21 +10,27 @@ namespace SFA.DAS.ContentApi.Data
 {
     public class DbContextWithNewTransactionFactory : IContentApiDbContextFactory
     {
-        private readonly DbConnection _dbConnection;
+        private readonly SqlConnection _sqlConnection;
         private readonly IEnvironmentService _environmentService;
         private readonly ILoggerFactory _loggerFactory;
 
-        public DbContextWithNewTransactionFactory(DbConnection dbConnection, IEnvironmentService environmentService, ILoggerFactory loggerFactory)
+        public DbContextWithNewTransactionFactory(SqlConnection sqlConnection, IEnvironmentService environmentService, ILoggerFactory loggerFactory)
         {
-            _dbConnection = dbConnection;
+            _sqlConnection = sqlConnection;
             _environmentService = environmentService;
             _loggerFactory = loggerFactory;
         }
 
         public ContentApiDbContext CreateDbContext()
         {
+            if (!_environmentService.IsCurrent(DasEnv.LOCAL))
+            {
+                AzureServiceTokenProvider azureServiceTokenProvider = new AzureServiceTokenProvider();
+                _sqlConnection.AccessToken = azureServiceTokenProvider.GetAccessTokenAsync("https://database.windows.net/").GetAwaiter().GetResult();
+            }
+
             var optionsBuilder = new DbContextOptionsBuilder<ContentApiDbContext>()
-                .UseSqlServer(_dbConnection)
+                .UseSqlServer(_sqlConnection)
                 .ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
 
             if (_environmentService.IsCurrent(DasEnv.LOCAL))
