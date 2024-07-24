@@ -9,6 +9,8 @@ variables:
     value: SFA.DAS.ContentApi
   - name: buildConfiguration
     value: release
+  - group: RELEASE Management Resources
+  - group: RELEASE das-content-api
 
 resources:
   repositories:
@@ -29,3 +31,19 @@ stages:
     parameters:
       SolutionBaseName: $(SolutionBaseName).dacpac
       SqlProjectPath: src/$(SolutionBaseName).Database/$(SolutionBaseName).Database.sqlproj
+
+- stage: Deploy_AT
+  dependsOn: Build
+  displayName: Deploy to AT
+  condition: and(succeeded(), eq(variables.Deploy, 'true'))
+  variables:
+  - group: DevTest Management Resources
+  - group: AT DevTest Shared Resources
+  - group: AT das-content-api
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: AT
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
