@@ -3,6 +3,7 @@ parameters:
   SolutionBaseName:
   Environment:
   AppRoleAssignmentsServiceConnection:
+  OverrideBlockOnPossibleDataLoss: false
 
 jobs:
 - deployment: DeployWebApp
