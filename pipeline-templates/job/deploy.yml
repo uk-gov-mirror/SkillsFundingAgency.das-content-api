@@ -1,7 +1,7 @@
 parameters:
   ServiceConnection:
   SolutionBaseName:
-  Environment:
+  Environment: ''
   AppRoleAssignmentsServiceConnection:
   OverrideBlockOnPossibleDataLoss: false
 
