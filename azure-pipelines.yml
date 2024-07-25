@@ -58,7 +58,7 @@ stages:
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
-      # Environment: AT
+      Environment: AT
       SolutionBaseName: $(SolutionBaseName)
       ServiceConnection: SFA-DAS-DevTest-ARM
       AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
