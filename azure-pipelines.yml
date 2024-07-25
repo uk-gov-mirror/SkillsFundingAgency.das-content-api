@@ -56,7 +56,7 @@ stages:
   - group: AT DevTest Shared Resources
   - group: AT das-content-api
   jobs:
-  - template: pipeline-templates/job/deploy.yml
+  - template: pipeline-templates/job/deploy2.yml
     parameters:
       # Environment: AT
       SolutionBaseName: $(SolutionBaseName)
