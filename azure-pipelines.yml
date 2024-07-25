@@ -45,4 +45,5 @@ stages:
     parameters:
       ServiceConnection: SFA-DAS-DevTest-ARM
       SolutionBaseName: $(SolutionBaseName)
+
       AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
