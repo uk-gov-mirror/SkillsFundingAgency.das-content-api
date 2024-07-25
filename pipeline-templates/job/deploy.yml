@@ -1,7 +1,7 @@
 parameters:
   ServiceConnection:
   SolutionBaseName:
-  Environment: "default"
+  # Environment: "default"
   AppRoleAssignmentsServiceConnection:
   OverrideBlockOnPossibleDataLoss: false
 
@@ -9,7 +9,7 @@ jobs:
 - deployment: DeployWebApp
   pool:
     name: DAS - Continuous Deployment Agents
-  environment: ${{ parameters.Environment }}
+  environment: AT
   strategy:
     runOnce:
       deploy:
@@ -34,7 +34,7 @@ jobs:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             SubscriptionId: $(SubscriptionId)
             Location: $(ResourceGroupLocation)
-            Environment: ${{ parameters.Environment }}
+            Environment: AT
             TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/template.json
             ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.parameters.json
             IsMultiRepoCheckout: true
